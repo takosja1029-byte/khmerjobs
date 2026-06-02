@@ -20,6 +20,9 @@ async function startServer() {
   } else {
     const distPath = path.join(process.cwd(), 'dist');
     app.use(express.static(distPath));
+    app.get('/sitemap.xml', (req, res) => {
+      res.sendFile(path.join(process.cwd(), 'sitemap.xml'));
+    });
     app.get('*', (req, res) => {
       res.sendFile(path.join(distPath, 'index.html'));
     });
