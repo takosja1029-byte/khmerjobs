@@ -1,0 +1,77 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isEmailVerified() {
+      return request.auth.token.email_verified == true;
+    }
+    
+    function isOwner(email) {
+      return isSignedIn() && request.auth.token.email == email;
+    }
+
+    function isUserId(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Jobs collection
+    match /jobs/{jobId} {
+      allow read: if true; // Publicly readable
+      allow create, update: if isSignedIn() && isEmailVerified(); // For now, any verified user can post/edit (could be restricted to admins later)
+      allow delete: if false; // Deny deletes for now
+    }
+
+    // Companies collection
+    match /companies/{companyId} {
+      allow read: if true; // Publicly readable
+      allow write: if false; // Static data for now
+    }
+
+    // Users collection
+    match /users/{userId} {
+      allow read, write: if isUserId(userId);
+    }
+
+    // Saved Jobs collection
+    match /saved_jobs/{savedJobId} {
+      allow read: if isSignedIn() && resource.data.userEmail == request.auth.token.email;
+      allow create: if isSignedIn() && request.resource.data.userEmail == request.auth.token.email;
+      allow update: if isSignedIn() && resource.data.userEmail == request.auth.token.email && request.resource.data.userEmail == request.auth.token.email;
+      allow delete: if isSignedIn() && resource.data.userEmail == request.auth.token.email;
+    }
+
+    // Job Alerts collection
+    match /job_alerts/{alertId} {
+      allow read: if isSignedIn() && resource.data.userEmail == request.auth.token.email;
+      allow create: if isSignedIn() && request.resource.data.userEmail == request.auth.token.email;
+      allow update: if isSignedIn() && resource.data.userEmail == request.auth.token.email && request.resource.data.userEmail == request.auth.token.email;
+      allow delete: if isSignedIn() && resource.data.userEmail == request.auth.token.email;
+    }
+
+    // Applications collection
+    match /applications/{applicationId} {
+      allow read: if isSignedIn() && resource.data.email == request.auth.token.email;
+      allow create: if isSignedIn(); // Backend handles creation mostly, but allow client to create if needed (though backend adds extra fields)
+    }
+
+    // Documents collection
+    match /documents/{docId} {
+      allow read: if isSignedIn() && resource.data.userEmail == request.auth.token.email;
+      allow create: if isSignedIn() && request.resource.data.userEmail == request.auth.token.email;
+      allow delete: if isSignedIn() && resource.data.userEmail == request.auth.token.email;
+    }
+  }
+}

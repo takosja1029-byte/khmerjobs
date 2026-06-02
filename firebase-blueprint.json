@@ -1,0 +1,137 @@
+{
+  "entities": {
+    "Job": {
+      "title": "Job",
+      "description": "A job posting",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "company": { "type": "string" },
+        "companyId": { "type": "string" },
+        "location": { "type": "string" },
+        "salary": { "type": "string" },
+        "type": { "type": "string" },
+        "logo": { "type": "string" },
+        "category": { "type": "string" },
+        "postedAt": { "type": "string" },
+        "urgent": { "type": "boolean" },
+        "description": { "type": "string" },
+        "companySize": { "type": "string" }
+      },
+      "required": ["id", "title", "company", "location", "type", "category"]
+    },
+    "Company": {
+      "title": "Company",
+      "description": "A company profile",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "logo": { "type": "string" },
+        "industry": { "type": "string" },
+        "website": { "type": "string" },
+        "size": { "type": "string" },
+        "founded": { "type": "string" },
+        "location": { "type": "string" },
+        "description": { "type": "string" },
+        "benefits": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["id", "name"]
+    },
+    "User": {
+      "title": "User",
+      "description": "User profile and settings",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "picture": { "type": "string" }
+      },
+      "required": ["email"]
+    },
+    "SavedJob": {
+      "title": "SavedJob",
+      "description": "A job saved by a user",
+      "type": "object",
+      "properties": {
+        "userEmail": { "type": "string" },
+        "jobId": { "type": "string" }
+      },
+      "required": ["userEmail", "jobId"]
+    },
+    "JobAlert": {
+      "title": "JobAlert",
+      "description": "A job alert subscription",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userEmail": { "type": "string" },
+        "name": { "type": "string" },
+        "filters": { "type": "object" },
+        "createdAt": { "type": "string" },
+        "lastChecked": { "type": "string" }
+      },
+      "required": ["id", "userEmail", "name", "filters"]
+    },
+    "Application": {
+      "title": "Application",
+      "description": "A job application submitted by a user",
+      "type": "object",
+      "properties": {
+        "jobId": { "type": "string" },
+        "fullName": { "type": "string" },
+        "email": { "type": "string" },
+        "cvName": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "delivered": { "type": "object" }
+      },
+      "required": ["jobId", "fullName", "email", "cvName"]
+    },
+    "UserDocument": {
+      "title": "UserDocument",
+      "description": "A document (e.g. CV) saved by a user",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userEmail": { "type": "string" },
+        "name": { "type": "string" },
+        "size": { "type": "number" },
+        "mimetype": { "type": "string" },
+        "content": { "type": "string", "description": "Binary buffer content" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "userEmail", "name", "content"]
+    }
+  },
+  "firestore": {
+    "/jobs/{jobId}": {
+      "schema": "Job",
+      "description": "Collection of job postings"
+    },
+    "/companies/{companyId}": {
+      "schema": "Company",
+      "description": "Collection of company profiles"
+    },
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "/saved_jobs/{savedJobId}": {
+      "schema": "SavedJob",
+      "description": "Jobs saved by users"
+    },
+    "/job_alerts/{alertId}": {
+      "schema": "JobAlert",
+      "description": "Job alert subscriptions"
+    },
+    "/applications/{applicationId}": {
+      "schema": "Application",
+      "description": "Job applications submitted"
+    },
+    "/documents/{docId}": {
+      "schema": "UserDocument",
+      "description": "User saved documents"
+    }
+  }
+}

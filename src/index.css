@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700&display=swap');
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: #fbfbfe;
+  --surface: #ffffff;
+  --brand-muted: #eef2ff;
+  --text-slate-900: #0f172a;
+  --text-slate-800: #1e293b;
+  --text-slate-700: #334155;
+  --text-slate-650: #475569;
+  --text-slate-600: #475569;
+  --text-slate-500: #64748b;
+  --text-slate-400: #94a3b8;
+  --text-slate-300: #cbd5e1;
+  --text-slate-200: #e2e8f0;
+  --text-slate-50: #f8fafc;
+  --border-slate-100: #f1f5f9;
+  --border-slate-200: #e2e8f0;
+}
+
+.dark {
+  --background: #0b0f19;
+  --surface: #111827;
+  --brand-muted: #1e1b4b;
+  --text-slate-900: #f8fafc;
+  --text-slate-800: #e2e8f0;
+  --text-slate-700: #cbd5e1;
+  --text-slate-650: #94a3b8;
+  --text-slate-600: #cbd5e1;
+  --text-slate-500: #94a3b8;
+  --text-slate-400: #64748b;
+  --text-slate-300: #475569;
+  --text-slate-200: #334155;
+  --text-slate-50: #1f2937;
+  --border-slate-100: #1f2937;
+  --border-slate-200: #334155;
+}
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Outfit", sans-serif;
+  
+  --color-brand: #3a5cf0;
+  --color-brand-muted: var(--brand-muted);
+  --color-surface: var(--surface);
+  --color-background: var(--background);
+  
+  --color-slate-900: var(--text-slate-900);
+  --color-slate-800: var(--text-slate-800);
+  --color-slate-700: var(--text-slate-700);
+  --color-slate-655: var(--text-slate-650);
+  --color-slate-650: var(--text-slate-650);
+  --color-slate-600: var(--text-slate-600);
+  --color-slate-500: var(--text-slate-500);
+  --color-slate-400: var(--text-slate-400);
+  --color-slate-300: var(--text-slate-300);
+  --color-slate-205: var(--text-slate-200);
+  --color-slate-200: var(--text-slate-200);
+  --color-slate-100: var(--border-slate-100);
+  --color-slate-50: var(--text-slate-50);
+  
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-slate-900 antialiased font-sans transition-colors duration-300;
+  }
+  
+  h1, h2, h3, h4 {
+    @apply font-display tracking-tight text-slate-900 transition-colors duration-300;
+  }
+}
+
+.smooth-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
