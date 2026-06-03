@@ -5,6 +5,14 @@ import { fileURLToPath } from 'url';
 import app from './src/backend/app.ts';
 import admin from 'firebase-admin';
 
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(
+      JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT || '{}')
+    ),
+  });
+}
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
