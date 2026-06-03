@@ -3,7 +3,7 @@ import { createServer as createViteServer } from 'vite';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import app from './src/backend/app.ts';
-import { getFirestore } from 'firebase-admin/firestore';
+import admin from 'firebase-admin';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -23,7 +23,7 @@ async function startServer() {
     app.use(express.static(distPath));
     app.get('/sitemap.xml', async (req, res) => {
   try {
-    const db = getFirestore();
+    const db = admin.firestore();
     const snapshot = await db.collection('jobs').get();
 
     const jobUrls = snapshot.docs.map(doc => {
