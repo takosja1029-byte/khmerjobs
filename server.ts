@@ -32,7 +32,7 @@ async function startServer() {
     app.use(express.static(distPath));
     app.get('/sitemap.xml', async (req, res) => {
   try {
-    const snapshot = await db.collection('jobs').get();
+  const snapshot = await sitemapDb.collection('jobs').get();
 
     const jobUrls = snapshot.docs.map(doc => {
       const data = doc.data();
