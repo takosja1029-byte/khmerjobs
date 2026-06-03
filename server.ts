@@ -11,7 +11,7 @@ const sitemapApp = getApps().find(a => a.name === 'sitemap') ||
     credential: cert(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT || '{}')),
   }, 'sitemap');
 
-const sitemapDb = getFirestore(sitemapApp);
+const sitemapDb = getFirestore(sitemapApp, 'ai-studio-a6b5fcf5-7dea-4962-bad8-c5f57d50f85f');
 
 
 const __filename = fileURLToPath(import.meta.url);
