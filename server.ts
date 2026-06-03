@@ -3,7 +3,15 @@ import { createServer as createViteServer } from 'vite';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import app from './src/backend/app.ts';
-import { db } from './src/backend/app.ts';
+import { initializeApp, cert, getApps } from 'firebase-admin/app';
+import { getFirestore } from 'firebase-admin/firestore';
+
+const sitemapApp = getApps().find(a => a.name === 'sitemap') ||
+  initializeApp({
+    credential: cert(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT || '{}')),
+  }, 'sitemap');
+
+const sitemapDb = getFirestore(sitemapApp);
 
 
 const __filename = fileURLToPath(import.meta.url);
