@@ -23,7 +23,7 @@ async function startServer() {
     app.use(express.static(distPath));
     app.get('/sitemap.xml', async (req, res) => {
   try {
-    const db = admin.firestore();
+    const db = admin.app().firestore();
     const snapshot = await db.collection('jobs').get();
 
     const jobUrls = snapshot.docs.map(doc => {
