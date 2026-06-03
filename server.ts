@@ -23,6 +23,12 @@ async function startServer() {
     app.get('/sitemap.xml', (req, res) => {
       res.sendFile(path.join(process.cwd(), 'sitemap.xml'));
     });
+
+    app.get('/robots.txt', (req, res) => {
+      res.type('text/plain');
+      res.send('User-agent: *\nAllow: /\n\nSitemap: https://khmerjobs.onrender.com/sitemap.xml');
+    });
+
     app.get('*', (req, res) => {
       res.sendFile(path.join(distPath, 'index.html'));
     });
