@@ -272,7 +272,7 @@ let isDbConnected = false;
 
 log(`[Firebase] Initial target: ${activeProjectId}/${activeDatabaseId}`);
 // Use default adminApp initially to avoid crashes if named app doesn't exist yet
-let db = getFirestore(adminApp, activeDatabaseId === '(default)' ? undefined : activeDatabaseId);
+export let db = getFirestore(adminApp, activeDatabaseId === '(default)' ? undefined : activeDatabaseId);
 
 // Dedicated app for Token Verification
 const authAdminApp = admin.apps.find(a => a?.name === 'auth-verify') || 
