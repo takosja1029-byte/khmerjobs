@@ -3,6 +3,7 @@ import { createServer as createViteServer } from 'vite';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import app from './src/backend/app.ts';
+import { getFirestore } from 'firebase-admin/firestore';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -20,9 +21,41 @@ async function startServer() {
   } else {
     const distPath = path.join(process.cwd(), 'dist');
     app.use(express.static(distPath));
-    app.get('/sitemap.xml', (req, res) => {
-      res.sendFile(path.join(process.cwd(), 'sitemap.xml'));
-    });
+    app.get('/sitemap.xml', async (req, res) => {
+  try {
+    const db = getFirestore();
+    const snapshot = await db.collection('jobs').get();
+
+    const jobUrls = snapshot.docs.map(doc => {
+      const data = doc.data();
+      const lastmod = data.updatedAt?.toDate?.()?.toISOString?.()?.split('T')[0]
+                      || new Date().toISOString().split('T')[0];
+      return `
+  <url>
+    <loc>https://khmerjobs.onrender.com/jobs/${doc.id}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>`;
+    }).join('');
+
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://khmerjobs.onrender.com/</loc>
+    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>${jobUrls}
+</urlset>`;
+
+    res.header('Content-Type', 'application/xml');
+    res.send(xml);
+  } catch (err) {
+    console.error('Sitemap error:', err);
+    res.sendFile(path.join(process.cwd(), 'sitemap.xml'));
+  }
+});
 
     app.get('/robots.txt', (req, res) => {
       res.type('text/plain');
